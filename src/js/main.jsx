@@ -9,12 +9,14 @@ import "bootstrap"
 import '../styles/index.css'
 
 // components
-import Home from './components/Home';
-import Lista from './components/Lista';
+// import Home from './components/Home';
+import Fech from './components/Fech';
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* <Home/> */}
-    <Lista />
+    {/* <Home /> */}
+    <Fech />
+
   </React.StrictMode>,
 )
