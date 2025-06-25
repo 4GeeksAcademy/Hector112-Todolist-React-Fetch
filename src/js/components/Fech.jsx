@@ -11,6 +11,15 @@ const Fech = () => {
         fetchTasks();
     }, []);
 
+    // Añadir tarea con Enter
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addTask();
+            console.log("Enter presionado");
+        }
+    };
+
     // Función para obtener tareas
     const fetchTasks = async () => {
         setLoading(true);
@@ -26,7 +35,6 @@ const Fech = () => {
     // Agregar NUEVA TAREA
     const addTask = async () => {
         if (inputValue.trim() === "") return;
-
         try {
             const response = await fetch(`https://playground.4geeks.com/todo/todos/${username}`, {
                 method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ label: inputValue.trim() })
@@ -45,12 +53,6 @@ const Fech = () => {
         } catch (error) { console.error("Error:", error); }
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            addTask();
-        }
-    };
-
     return (
         <div className="containerTodo text-center">
             <div className="contenedorLista d-flex row justify-content-center">
@@ -61,20 +63,25 @@ const Fech = () => {
                         <input type="text" className="form-control todo-input text-center" placeholder="Añadir una nueva tarea"
                             value={inputValue} onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={handleKeyDown} disabled={loading} />
+
                     </div>
 
-                    {loading ? (<div className="text-center my-4">Cargando</div>) : (
-                        <div className="list-group">
-                            {tasks.map((task) => (
-                                <div key={task.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                    <span style={{ flexGrow: 1, textAlign: "left" }}> {task.label} </span>
-                                    <button onClick={() => deleteTask(task.id)} className="btn btn-sm btn-outline-danger" disabled={loading}>
-                                        X
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    <button onClick={addTask} className="btn btn-primary mb-3" disabled={loading}>
+                        Añadir Tarea
+                    </button>
+
+                    {/* Lista de tareas */}
+                    <ul className="list-group">
+                        {tasks.map((task) => (
+                            <li key={task.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                <span style={{ flexGrow: 1, textAlign: "left" }}> {task.label} </span>
+                                <button onClick={() => deleteTask(task.id)} className="btn btn-sm btn-outline-danger" disabled={loading}>
+                                    X
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+
 
                     <div className="mt-2 text-muted small">
                         {tasks.length} {tasks.length === 1 ? "tarea" : "tareas"} en total
